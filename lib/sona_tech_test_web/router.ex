@@ -21,6 +21,7 @@ defmodule SonaTechTestWeb.Router do
     pipe_through :browser
 
     live "/", PostLive.Index
+    live "/posts/:id", PostLive.Show
   end
 
   # Other scopes may use custom stacks.
