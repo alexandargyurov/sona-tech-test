@@ -6,13 +6,15 @@ defmodule SonaTechTest.Posts.Post do
     field :description, :string
     field :title, :string
 
+    belongs_to :user, SonaTechTest.Accounts.User
+
     timestamps(type: :utc_datetime)
   end
 
   @doc false
   def changeset(post, attrs) do
     post
-    |> cast(attrs, [:title, :description])
+    |> cast(attrs, [:title, :description, :user_id])
     |> validate_required([:title, :description])
   end
 end
