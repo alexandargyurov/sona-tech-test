@@ -18,7 +18,7 @@ defmodule SonaTechTest.Comments do
 
   """
   def list_comments(post_id) do
-    Repo.all(from p in Comment, where: p.post_id == ^post_id)
+    Repo.all(from c in Comment, where: c.post_id == ^post_id, order_by: [desc: c.id])
   end
 
   @doc """
@@ -53,6 +53,7 @@ defmodule SonaTechTest.Comments do
     %Comment{}
     |> Comment.changeset(attrs)
     |> Repo.insert()
+    |> broadcast(:comment_created)
   end
 
   @doc """
@@ -100,5 +101,16 @@ defmodule SonaTechTest.Comments do
   """
   def change_comment(%Comment{} = comment, attrs \\ %{}) do
     Comment.changeset(comment, attrs)
+  end
+
+  def subscribe(post_id) do
+    Phoenix.PubSub.subscribe(SonaTechTest.PubSub, "comments:#{post_id}")
+  end
+
+  defp broadcast({:error, _reason} = error, _event), do: error
+
+  defp broadcast({:ok, comment}, event) do
+    Phoenix.PubSub.broadcast(SonaTechTest.PubSub, "comments:#{comment.post_id}", {event, comment})
+    {:ok, comment}
   end
 end
