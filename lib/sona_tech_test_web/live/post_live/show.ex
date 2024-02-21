@@ -16,9 +16,12 @@ defmodule SonaTechTestWeb.PostLive.Show do
 
     if connected?(socket), do: Comments.subscribe(post_id)
 
+    post = Posts.get_post!(post_id)
+
     socket =
       socket
-      |> assign(:post, Posts.get_post!(post_id))
+      |> assign(:page_title, "#{post.title}")
+      |> assign(:post, post)
       |> assign(:comments, Comments.list_comments(post_id))
       |> assign(:new_comment, to_form(changeset))
       |> assign(:current_user, current_user)

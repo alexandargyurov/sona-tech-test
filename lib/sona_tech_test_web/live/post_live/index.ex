@@ -4,7 +4,10 @@ defmodule SonaTechTestWeb.PostLive.Index do
   alias SonaTechTest.Posts
 
   def mount(_params, _session, socket) do
-    socket = socket |> assign(:posts, Posts.list_posts())
+    socket =
+      socket
+      |> assign(:page_title, "All posts")
+      |> assign(:posts, Posts.list_posts())
 
     {:ok, socket}
   end

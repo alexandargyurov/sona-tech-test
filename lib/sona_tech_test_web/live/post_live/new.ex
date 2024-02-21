@@ -5,7 +5,11 @@ defmodule SonaTechTestWeb.PostLive.New do
 
   def mount(_params, _session, socket) do
     changeset = Posts.Post.changeset(%Posts.Post{})
-    socket = socket |> assign(:form, to_form(changeset))
+
+    socket =
+      socket
+      |> assign(:page_title, "Create post")
+      |> assign(:form, to_form(changeset))
 
     {:ok, socket}
   end
