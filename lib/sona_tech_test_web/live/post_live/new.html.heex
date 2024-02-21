@@ -1,0 +1,12 @@
+<div class="flex gap-8 flex-col">
+  <h1 class="text-2xl font-bold grow">Create new post</h1>
+
+  <.form class="flex flex-col gap-4" for={@form} phx-submit="submit">
+    <.input field={@form[:title]} type="text" label="Title" />
+    <.input field={@form[:description]} type="textarea" label="Description" />
+
+    <button class="bg-black hover:bg-gray-700 text-white font-bold py-2 px-3 rounded-md">
+      Create Post
+    </button>
+  </.form>
+</div>

@@ -68,6 +68,7 @@ defmodule SonaTechTestWeb.Router do
       on_mount: [{SonaTechTestWeb.UserAuth, :ensure_authenticated}] do
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
+      live "/new-post", PostLive.New
     end
   end
 

@@ -12,7 +12,7 @@ defmodule SonaTechTest.Posts.Post do
   end
 
   @doc false
-  def changeset(post, attrs) do
+  def changeset(post, attrs \\ %{}) do
     post
     |> cast(attrs, [:title, :description, :user_id])
     |> validate_required([:title, :description])
