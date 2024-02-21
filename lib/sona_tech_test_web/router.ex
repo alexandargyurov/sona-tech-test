@@ -20,7 +20,7 @@ defmodule SonaTechTestWeb.Router do
   scope "/", SonaTechTestWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    live "/", PostLive.Index
   end
 
   # Other scopes may use custom stacks.
