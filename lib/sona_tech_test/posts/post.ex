@@ -8,6 +8,8 @@ defmodule SonaTechTest.Posts.Post do
 
     belongs_to :user, SonaTechTest.Accounts.User
 
+    has_many :comments, SonaTechTest.Posts.Comment
+
     timestamps(type: :utc_datetime)
   end
 
