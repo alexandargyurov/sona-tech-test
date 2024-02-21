@@ -85,6 +85,9 @@
 
                   <button
                     type="submit"
+                    phx-click={
+                      SonaTechTestWeb.CoreComponents.hide_modal("edit-modal-#{comment.id}")
+                    }
                     class="bg-black hover:bg-gray-700 text-white font-bold py-2 px-3 rounded-md"
                   >
                     Update comment
