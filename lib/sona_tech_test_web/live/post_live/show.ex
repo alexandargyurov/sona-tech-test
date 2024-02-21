@@ -24,6 +24,7 @@ defmodule SonaTechTestWeb.PostLive.Show do
       |> assign(:post, post)
       |> assign(:comments, Comments.list_comments(post_id))
       |> assign(:new_comment, to_form(changeset))
+      |> assign(:edit_comment, to_form(changeset))
       |> assign(:current_user, current_user)
 
     {:ok, socket}
@@ -47,7 +48,37 @@ defmodule SonaTechTestWeb.PostLive.Show do
     end
   end
 
+  def handle_event("update-comment", %{"comment" => payload}, socket) do
+    comment = Comments.get_comment!(payload["id"])
+
+    case Comments.update_comment(comment, payload) do
+      {:ok, _comment} ->
+        {:noreply, socket}
+
+      {:error, changeset} ->
+        socket =
+          socket
+          |> assign(:edit_comment, to_form(changeset))
+
+        {:noreply, socket}
+    end
+  end
+
   def handle_info({:comment_created, comment}, socket) do
     {:noreply, update(socket, :comments, fn comments -> [comment | comments] end)}
+  end
+
+  # Is this the best way to handle this update?
+  def handle_info({:comment_updated, updated_comment}, socket) do
+    {:noreply,
+     update(socket, :comments, fn comments ->
+       Enum.map(comments, fn c ->
+         if c.id == updated_comment.id do
+           updated_comment
+         else
+           c
+         end
+       end)
+     end)}
   end
 end

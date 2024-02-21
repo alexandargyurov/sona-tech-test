@@ -72,6 +72,7 @@ defmodule SonaTechTest.Comments do
     comment
     |> Comment.changeset(attrs)
     |> Repo.update()
+    |> broadcast(:comment_updated)
   end
 
   @doc """

@@ -48,14 +48,51 @@
         />
         <div class="flex justify-between w-full items-baseline">
           <p class="text-lg font-medium"><%= comment.msg %></p>
-          <p
-            class="text-xs"
-            phx-hook="LocalTime"
-            id={"comment-#{comment.id}"}
-            data-date={"#{comment.inserted_at}"}
-          >
-            <%= comment.inserted_at %>
-          </p>
+          <div class="flex items-center gap-2">
+            <p
+              class="text-xs"
+              phx-hook="LocalTime"
+              id={"comment-#{comment.id}"}
+              data-date={"#{comment.inserted_at}"}
+            >
+              <%= comment.updated_at %>
+            </p>
+
+            <%= if @current_user && @current_user.id == comment.user_id do %>
+              <button phx-click={
+                SonaTechTestWeb.CoreComponents.show_modal("edit-modal-#{comment.id}")
+              }>
+                <.icon name="hero-pencil-square-micro" />
+              </button>
+
+              <.modal id={"edit-modal-#{comment.id}"}>
+                <.form
+                  class="flex gap-2 items-end"
+                  for={@edit_comment}
+                  phx-submit="update-comment"
+                >
+                  <div class="grow">
+                    <.input
+                      field={@edit_comment[:msg]}
+                      type="text"
+                      label="Update your comment"
+                      value={comment.msg}
+                    />
+                  </div>
+
+                  <.input field={@edit_comment[:id]} type="hidden" value={comment.id} />
+                  <.input field={@edit_comment[:user_id]} type="hidden" value={@current_user.id} />
+
+                  <button
+                    type="submit"
+                    class="bg-black hover:bg-gray-700 text-white font-bold py-2 px-3 rounded-md"
+                  >
+                    Update comment
+                  </button>
+                </.form>
+              </.modal>
+            <% end %>
+          </div>
         </div>
       </div>
     </div>
