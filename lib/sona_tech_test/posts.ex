@@ -53,6 +53,7 @@ defmodule SonaTechTest.Posts do
     %Post{}
     |> Post.changeset(attrs)
     |> Repo.insert()
+    |> broadcast(:post_created)
   end
 
   @doc """
@@ -100,5 +101,16 @@ defmodule SonaTechTest.Posts do
   """
   def change_post(%Post{} = post, attrs \\ %{}) do
     Post.changeset(post, attrs)
+  end
+
+  def subscribe() do
+    Phoenix.PubSub.subscribe(SonaTechTest.PubSub, "posts")
+  end
+
+  defp broadcast({:error, _reason} = error, _event), do: error
+
+  defp broadcast({:ok, post}, event) do
+    Phoenix.PubSub.broadcast(SonaTechTest.PubSub, "posts", {event, post})
+    {:ok, post}
   end
 end
